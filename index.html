@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>opentype.js – JavaScript parser/writer for OpenType and TrueType fonts.</title>
+    <meta name="description"
+        content="A JavaScript library to manipulate the letterforms of text from the browser or node.js.">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="site.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src='./patch.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"
+        integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css"
+        integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">txtonjpg</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <button id="loadjpg" class="ui secondary button loadjpg"
+                            onclick="loadjpg_onclick()">Upload</button>
+                        <input id="file" type="file" style="display: none">
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">JPGfileName</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <h4 id="JPGfileName" class="nav-link">.</h4>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <form class="container" name="demo">
+
+        <div class="explain">
+            opentype.js is an OpenType and TrueType font parser and writer.
+            It allows you to access the <strong>letterforms</strong> of text from the browser or node.js.
+        </div>
+
+        <input id="file" type="file">
+        <output class="info" name="fontname"></output>
+        <canvas id="preview" width="940" height="300" class="text"></canvas>
+        <output id="message"></output>
+        <input class="text-input" value="Hello, World!" autofocus name="textField">
+        <label>Font Size<input type="range" min="6" max="500" step="2" value="150" name="fontsize" autocomplete="off"
+                oninput="nextElementSibling.innerText=value"><output>150</output></label>
+        <label><input type="checkbox" name="drawPoints">Draw Points</label>
+        <label><input type="checkbox" name="drawMetrics">Draw Metrics</label>
+        <label><input type="checkbox" name="kerning" checked="checked">Kerning</label>
+        <label><input type="checkbox" name="ligatures" checked="checked">Ligatures</label>
+        <label class="disabled"><input name="hinting" type="checkbox" onchange="hintingChanged(this)"
+                disabled="true">Hinting</label>
+
+        <hr>
+
+        <div class="explain">
+            Once you have the shapes, you can modify them, for example by <strong>snapping</strong> them to a virtual
+            grid:
+        </div>
+
+        <canvas id="snap" width="940" height="300" class="text"></canvas>
+        <label>Strength <input type="range" min="0" max="100" value="80" name="snapStrength"
+                oninput="nextElementSibling.innerText=value" /><output>80</output></label>
+        <label>Distance<input type="range" min="1" max="100" value="53" name="snapDistance"
+                oninput="nextElementSibling.innerText=value" /><output>53</output></label>
+        <label>X<input type="range" min="-100" max="100" value="0" name="snapX"
+                oninput="snextElementSibling.innerText=value" /><output>0</output></label>
+        <label>Y<input type="range" min="-100" max="100" value="0" name="snapY"
+                oninput="snextElementSibling.innerText=value" /><output>0</output></label>
+
+        <hr>
+
+        <div class="explain">
+            <h1>Glyphs</h1>
+            opentype.js provides you with <strong>raw access</strong> to the glyphs so you can modify them as you
+            please.
+        </div>
+
+        <div id="glyphs">
+        </div>
+        <div class="message">Only the first 100 glyphs are shown.</div>
+
+        <hr>
+
+        <div class="explain">
+            <h1>Free Software</h1>
+            <p>opentype.js is available on <a href="https://github.com/opentypejs/opentype.js">GitHub</a> under the <a
+                    href="https://raw.github.com/opentypejs/opentype.js/master/LICENSE">MIT License</a>.</p>
+            <p>Copyright &copy; 2020 Frederik De Bleser.</p>
+        </div>
+
+        <hr>
+    </form>
+
+
+    <script type="module">
+        import * as opentype from "/opentype.module.js";
+
+        const form = document.forms.demo;
+        form.oninput = renderText;
+        let font = null;
+
+
+        function doSnap(path) {
+            // Round a value to the nearest "step".
+            const snap = (v, distance, strength) => (v * (1.0 - strength)) + (strength * Math.round(v / distance) * distance);
+            const strength = +form.snapStrength.value / 100.0;
+            const snapDistance = +form.snapDistance.value;
+            const snapX = +form.snapX.value;
+            const snapY = +form.snapY.value;
+            for (let i = 0; i < path.commands.length; i++) {
+                var cmd = path.commands[i];
+                if (cmd.type !== 'Z') {
+                    cmd.x = snap(cmd.x + snapX, snapDistance, strength) - snapX;
+                    cmd.y = snap(cmd.y + snapY, snapDistance, strength) - snapY;
+                }
+                if (cmd.type === 'Q' || cmd.type === 'C') {
+                    cmd.x1 = snap(cmd.x1 + snapX, snapDistance, strength) - snapX;
+                    cmd.y1 = snap(cmd.y1 + snapY, snapDistance, strength) - snapY;
+                }
+                if (cmd.type === 'C') {
+                    cmd.x2 = snap(cmd.x2 + snapX, snapDistance, strength) - snapX;
+                    cmd.y2 = snap(cmd.y2 + snapY, snapDistance, strength) - snapY;
+                }
+            }
+        }
+
+        function renderText() {
+            const font = window.font;
+            if (!font) return;
+            const textToRender = form.textField.value;
+            var previewCtx = document.getElementById('preview').getContext('2d');
+            var options = {
+                kerning: form.kerning.checked,
+                hinting: form.hinting.checked,
+                features: {
+                    liga: form.ligatures.checked,
+                    rlig: form.ligatures.checked
+                }
+            };
+            previewCtx.clearRect(0, 0, 940, 300);
+            const fontSize = +form.fontsize.value;
+            font.draw(previewCtx, textToRender, 0, 200, fontSize, options);
+            if (form.drawPoints.checked) {
+                font.drawPoints(previewCtx, textToRender, 0, 200, fontSize, options);
+            }
+            if (form.drawMetrics.checked) {
+                font.drawMetrics(previewCtx, textToRender, 0, 200, fontSize, options);
+            }
+
+            const snapPath = font.getPath(textToRender, 0, 200, fontSize, options);
+            doSnap(snapPath);
+            var snapCtx = document.getElementById('snap').getContext('2d');
+            snapCtx.clearRect(0, 0, 940, 300);
+            snapPath.draw(snapCtx);
+        }
+
+        function enableHighDPICanvas(canvas) {
+            if (typeof canvas === 'string') {
+                canvas = document.getElementById(canvas);
+            }
+            var pixelRatio = window.devicePixelRatio || 1;
+            if (pixelRatio === 1) return;
+            var oldWidth = canvas.width;
+            var oldHeight = canvas.height;
+            canvas.width = oldWidth * pixelRatio;
+            canvas.height = oldHeight * pixelRatio;
+            canvas.style.width = oldWidth + 'px';
+            canvas.style.height = oldHeight + 'px';
+            canvas.getContext('2d').scale(pixelRatio, pixelRatio);
+        }
+
+        // Create a canvas and adds it to the document.
+        // Returns the 2d drawing context.
+        function createGlyphCanvas(glyph, size) {
+            var canvasId, html, glyphsDiv, wrap, canvas, ctx, pixelRatio;
+            canvasId = 'c' + glyph.index;
+            html = '<div class="wrapper" style="width:' + size + 'px"><canvas id="' + canvasId + '" width="' + size + '" height="' + size + '"></canvas><span>' + glyph.index + '</span></div>';
+            glyphsDiv = document.getElementById('glyphs');
+            wrap = document.createElement('div');
+            wrap.innerHTML = html;
+            glyphsDiv.appendChild(wrap);
+            canvas = document.getElementById(canvasId);
+            ctx = canvas.getContext('2d');
+            enableHighDPICanvas(canvas, ctx);
+            return ctx;
+        }
+
+        function showErrorMessage(message) {
+            var el = document.getElementById('message');
+            if (!message || message.trim().length === 0) {
+                el.style.display = 'none';
+            } else {
+                el.style.display = 'block';
+            }
+            el.innerHTML = message;
+        }
+
+        function onFontLoaded(font) {
+            window.font = font;
+
+            // Show the first 100 glyphs.
+            const glyphsDiv = document.getElementById('glyphs');
+            glyphsDiv.innerHTML = '';
+
+            const amount = Math.min(100, font.glyphs.length);
+            const x = 50;
+            const y = 120;
+            const fontSize = 72;
+            for (let i = 0; i < amount; i++) {
+                const glyph = font.glyphs.get(i);
+                const ctx = createGlyphCanvas(glyph, 150);
+                glyph.draw(ctx, x, y, fontSize);
+                glyph.drawPoints(ctx, x, y, fontSize);
+                glyph.drawMetrics(ctx, x, y, fontSize);
+            }
+
+            const hintingCheckbox = form.hinting;
+            const hintingLabel = form.hinting.parentElement;
+            if (font.hinting) {
+                hintingCheckbox.disabled = false;
+                hintingLabel.className = '';
+            } else {
+                hintingCheckbox.disabled = true;
+                hintingCheckbox.checked = false;
+                hintingLabel.className = 'disabled';
+            }
+
+            renderText();
+        }
+        const loadScript = (src) => new Promise((onload) => document.head.append(Object.assign(document.createElement('script'), { src, onload })));
+        async function display(file, name) {
+            form.fontname.innerText = name;
+            const isWoff2 = name.endsWith('.woff2');
+            if (isWoff2 && !window.Module) {
+                const wasmReady = new Promise((onRuntimeInitialized) => window.Module = { onRuntimeInitialized });
+                await loadScript('https://unpkg.com/wawoff2@2.0.1/build/decompress_binding.js').then(() => wasmReady);
+            }
+            try {
+                const data = await file.arrayBuffer();
+                onFontLoaded(opentype.parse(isWoff2 ? Module.decompress(data) : data));
+                showErrorMessage('');
+            } catch (err) {
+                showErrorMessage(err.toString());
+            }
+        }
+
+        form.file.onchange = function (e) {
+            display(e.target.files[0], e.target.files[0].name);
+        };
+
+        enableHighDPICanvas('preview');
+        enableHighDPICanvas('snap');
+
+        const fontFileName = 'ChenYuluoyan-Thin.woff';
+        display(await fetch(fontFileName), fontFileName);
+
+    </script>
+</body>
+
+</html>
