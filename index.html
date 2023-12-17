@@ -2,125 +2,136 @@
 <html lang="en">
 
 <head>
-    <title>opentype.js – JavaScript parser/writer for OpenType and TrueType fonts.</title>
-    <meta name="description"
-        content="A JavaScript library to manipulate the letterforms of text from the browser or node.js.">
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mobile-first PWA Example">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <title>Mobile-first PWA</title>
     <link rel="stylesheet" href="site.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src='./patch.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"
         integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css"
         integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            /* Disable horizontal scroll */
+        }
+
+        header {
+            background-color: #ffc0cb;
+            color: #fff;
+            text-align: center;
+            padding: 1em;
+        }
+
+        main {
+            padding: 1em;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">txtonjpg</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <button id="loadjpg" class="ui secondary button loadjpg"
-                            onclick="loadjpg_onclick()">Upload</button>
-                        <input id="file" type="file" style="display: none">
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">JPGfileName</a>
-                    </li>
-                </ul>
-                <div class="d-flex">
+    <header>
+        <button id="loadjpg" class="ui secondary button loadjpg"
+            onclick="console.log('loadjpg_onclick');document.getElementById('file').click();">select jpg</button>
+        <input id="file" type="file" style="display: none">
+    </header>
+
+    <main>
+        <p style="display: none;">.<img id="x" style="display: none;"></img></p>
+        <div class="ui two column centered grid" style="display: none;">
+            <div class="column">
+                <div class="ui compact message">
+                    <a class="nav-link active" aria-current="page" href="#">JPGfileName</a>
+                </div>
+                <div class="ui compact message">
                     <h4 id="JPGfileName" class="nav-link">.</h4>
                 </div>
             </div>
         </div>
-    </nav>
+        <div id="httpsgithubcomopentypejsopentypejs"></div>
+    </main>
+    <div class="float-button">
+        <script>function getCurrentDateTimeString() {
+                const now = new Date();
 
+                const year = now.getFullYear();
+                const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                const day = now.getDate().toString().padStart(2, '0');
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const seconds = now.getSeconds().toString().padStart(2, '0');
 
-    <form class="container" name="demo">
-
-        <div class="explain">
-            opentype.js is an OpenType and TrueType font parser and writer.
-            It allows you to access the <strong>letterforms</strong> of text from the browser or node.js.
-        </div>
-
-        <input id="file" type="file">
-        <output class="info" name="fontname"></output>
-        <canvas id="preview" width="940" height="300" class="text"></canvas>
-        <output id="message"></output>
-        <input class="text-input" value="Hello, World!" autofocus name="textField">
-        <label>Font Size<input type="range" min="6" max="500" step="2" value="150" name="fontsize" autocomplete="off"
-                oninput="nextElementSibling.innerText=value"><output>150</output></label>
-        <label><input type="checkbox" name="drawPoints">Draw Points</label>
-        <label><input type="checkbox" name="drawMetrics">Draw Metrics</label>
-        <label><input type="checkbox" name="kerning" checked="checked">Kerning</label>
-        <label><input type="checkbox" name="ligatures" checked="checked">Ligatures</label>
-        <label class="disabled"><input name="hinting" type="checkbox" onchange="hintingChanged(this)"
-                disabled="true">Hinting</label>
-
-        <hr>
-
-        <div class="explain">
-            Once you have the shapes, you can modify them, for example by <strong>snapping</strong> them to a virtual
-            grid:
-        </div>
-
-        <canvas id="snap" width="940" height="300" class="text"></canvas>
-        <label>Strength <input type="range" min="0" max="100" value="80" name="snapStrength"
-                oninput="nextElementSibling.innerText=value" /><output>80</output></label>
-        <label>Distance<input type="range" min="1" max="100" value="53" name="snapDistance"
-                oninput="nextElementSibling.innerText=value" /><output>53</output></label>
-        <label>X<input type="range" min="-100" max="100" value="0" name="snapX"
-                oninput="snextElementSibling.innerText=value" /><output>0</output></label>
-        <label>Y<input type="range" min="-100" max="100" value="0" name="snapY"
-                oninput="snextElementSibling.innerText=value" /><output>0</output></label>
-
-        <hr>
-
-        <div class="explain">
-            <h1>Glyphs</h1>
-            opentype.js provides you with <strong>raw access</strong> to the glyphs so you can modify them as you
-            please.
-        </div>
-
-        <div id="glyphs">
-        </div>
-        <div class="message">Only the first 100 glyphs are shown.</div>
-
-        <hr>
-
-        <div class="explain">
-            <h1>Free Software</h1>
-            <p>opentype.js is available on <a href="https://github.com/opentypejs/opentype.js">GitHub</a> under the <a
-                    href="https://raw.github.com/opentypejs/opentype.js/master/LICENSE">MIT License</a>.</p>
-            <p>Copyright &copy; 2020 Frederik De Bleser.</p>
-        </div>
-
-        <hr>
-    </form>
-
+                const dateTimeString = `${year}-${month}-${day}-${hours}-${minutes}-${seconds}`;
+                return dateTimeString;
+            }</script>
+        <button class="Fbutton"
+            onclick="const canvas = document.getElementById('preview');const link = document.createElement('a');const dataUrl = canvas.toDataURL('image/jpeg');link.href = dataUrl;link.download = getCurrentDateTimeString()+'.jpg';document.body.appendChild(link);link.click();document.body.removeChild(link);">download
+            text on jpg</button>
+    </div>
+    <footer style="display: none;">
+        &copy; 2023 Mobile-first PWA Example
+    </footer>
 
     <script type="module">
         import * as opentype from "/opentype.module.js";
 
-        const form = document.forms.demo;
-        form.oninput = renderText;
-        let font = null;
+        //////////////////////////////////////
+        function getViewport() {
+            var viewPortWidth;
+            var viewPortHeight;
 
+            // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
+            if (typeof window.innerWidth != 'undefined') {
+                viewPortWidth = window.innerWidth,
+                    viewPortHeight = window.innerHeight
+            }
+
+            // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
+            else if (typeof document.documentElement != 'undefined'
+                && typeof document.documentElement.clientWidth !=
+                'undefined' && document.documentElement.clientWidth != 0) {
+                viewPortWidth = document.documentElement.clientWidth,
+                    viewPortHeight = document.documentElement.clientHeight
+            }
+
+            // older versions of IE
+            else {
+                viewPortWidth = document.getElementsByTagName('body')[0].clientWidth,
+                    viewPortHeight = document.getElementsByTagName('body')[0].clientHeight
+            }
+            return [viewPortWidth, viewPortHeight];
+        }
+        const vw = getViewport()[0];
+        const vh = getViewport()[1];
+        //////////////////////////////////////
+
+        var form;
+        let font = null;
 
         function doSnap(path) {
             // Round a value to the nearest "step".
@@ -151,6 +162,9 @@
             if (!font) return;
             const textToRender = form.textField.value;
             var previewCtx = document.getElementById('preview').getContext('2d');
+            // img id='x' into previewCtx
+            previewCtx.drawImage(document.getElementById('x'), 0, 0);
+
             var options = {
                 kerning: form.kerning.checked,
                 hinting: form.hinting.checked,
@@ -159,14 +173,15 @@
                     rlig: form.ligatures.checked
                 }
             };
-            previewCtx.clearRect(0, 0, 940, 300);
+            //previewCtx.clearRect(0, 0, 940, 300);
             const fontSize = +form.fontsize.value;
-            font.draw(previewCtx, textToRender, 0, 200, fontSize, options);
+            const yMargin = +form.marginY.value;
+            font.draw(previewCtx, textToRender, 0, yMargin, fontSize, options);
             if (form.drawPoints.checked) {
-                font.drawPoints(previewCtx, textToRender, 0, 200, fontSize, options);
+                font.drawPoints(previewCtx, textToRender, 0, yMargin, fontSize, options);
             }
             if (form.drawMetrics.checked) {
-                font.drawMetrics(previewCtx, textToRender, 0, 200, fontSize, options);
+                font.drawMetrics(previewCtx, textToRender, 0, yMargin, fontSize, options);
             }
 
             const snapPath = font.getPath(textToRender, 0, 200, fontSize, options);
@@ -266,17 +281,125 @@
             }
         }
 
-        form.file.onchange = function (e) {
-            display(e.target.files[0], e.target.files[0].name);
-        };
-
-        enableHighDPICanvas('preview');
-        enableHighDPICanvas('snap');
-
         const fontFileName = 'ChenYuluoyan-Thin.woff';
-        display(await fetch(fontFileName), fontFileName);
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        $(document).ready(function () {
+            console.log("ready!");
+            document.getElementById('file').onchange = function (e) {
+                document.getElementById('JPGfileName').innerText = e.target.files[0].name;
+                //load image to id='x'
+                var reader = new FileReader();
+                reader.onload = function (event) {
+                    $('#x').attr('src', event.target.result);
+                    // Get the image element
+                    var myImage = document.getElementById('x');
+
+                    // Set up an onload event handler
+                    myImage.onload = async function () {
+                        // Get the width and height of the image
+                        var imageWidth = myImage.width;
+                        var imageHeight = myImage.height;
+                        var maxHeight = vh;
+                        var maxWidth = vw;
+                        if (imageWidth / imageHeight < vw / vh) {
+                            maxWidth = vh * imageWidth / imageHeight;
+                        } else {
+                            maxHeight = vw * imageHeight / imageWidth;
+                        }
+
+                        // Create a new <p> element
+                        var newParagraph = document.createElement('div');
+
+                        // Set the text content of the <p> element
+                        newParagraph.innerHTML = `
+                <form class="container" name="demo" id="demoOBJ">
+
+        <div class="explain" style="display:none;">
+            opentype.js is an OpenType and TrueType font parser and writer.
+            It allows you to access the <strong>letterforms</strong> of text from the browser or node.js.
+        </div>
+
+        <input id="file" type="file">
+        <output class="info" name="fontname"></output>
+        <canvas id="preview" width="${imageWidth}" height="${imageHeight}" class="text" style="position: absolute; left:1px; max-width:${Math.round(maxWidth)}px; max-height: ${Math.round(maxHeight)}px;"></canvas>
+        <output id="message"></output>
+        <input class="text-input" value="在jpg照片上添加文字，使用辰宇落雁體" autofocus name="textField" style="position: absolute; left:1px; top:${Math.round(vh * 0.7)}px;">
+        <label style="position: absolute; left:1px; top:${Math.round(vh * 0.8)}px;">Font Size<input type="range" min="6" max="500" step="2" value="150" name="fontsize" autocomplete="off"
+                oninput="nextElementSibling.innerText=value"><output>150</output></label>
+        <label style="position: absolute; left:1px; top:${Math.round(vh * 0.9)}px;">y margin<input type="range" min="6" max="${imageHeight}" step="2" value="150" name="marginY" autocomplete="off"
+                oninput="nextElementSibling.innerText=value"><output>150</output></label>
+        <label><input type="checkbox" name="drawPoints">Draw Points</label>
+        <label><input type="checkbox" name="drawMetrics">Draw Metrics</label>
+        <label><input type="checkbox" name="kerning" checked="checked">Kerning</label>
+        <label><input type="checkbox" name="ligatures" checked="checked">Ligatures</label>
+        <label class="disabled"><input name="hinting" type="checkbox" onchange="hintingChanged(this)"
+                disabled="true">Hinting</label>
+
+        <hr style="display: none;">
+
+        <div class="explain">
+            Once you have the shapes, you can modify them, for example by <strong>snapping</strong> them to a virtual
+            grid:
+        </div>
+
+        <canvas id="snap" width="940" height="300" class="text" style="display: none;"></canvas>
+        <label style="display: none;">Strength <input type="range" min="0" max="100" value="80" name="snapStrength"
+                oninput="nextElementSibling.innerText=value" /><output>80</output></label>
+        <label style="display: none;">Distance<input type="range" min="1" max="100" value="53" name="snapDistance"
+                oninput="nextElementSibling.innerText=value" /><output>53</output></label>
+        <label style="display: none;">X<input type="range" min="-100" max="100" value="0" name="snapX"
+                oninput="snextElementSibling.innerText=value" /><output>0</output></label>
+        <label style="display: none;">Y<input type="range" min="-100" max="100" value="0" name="snapY"
+                oninput="snextElementSibling.innerText=value" /><output>0</output></label>
+
+        <hr style="display: none;">
+
+        <div class="explain" style="display: none;">
+            <h1>Glyphs</h1>
+            opentype.js provides you with <strong>raw access</strong> to the glyphs so you can modify them as you
+            please.
+        </div>
+
+        <div id="glyphs" style="display: none;">
+        </div>
+        <div class="message" style="display: none;">Only the first 100 glyphs are shown.</div>
+
+        <hr style="display: none;">
+
+        <div class="explain" style="display: none;">
+            <h1>Free Software</h1>
+            <p>opentype.js is available on <a href="https://github.com/opentypejs/opentype.js">GitHub</a> under the <a
+                    href="https://raw.github.com/opentypejs/opentype.js/master/LICENSE">MIT License</a>.</p>
+            <p>Copyright &copy; 2020 Frederik De Bleser.</p>
+        </div>
+
+        <hr style="display: none;">
+    </form>
+                `;
+
+                        // Append the <p> element to the end of the <body> element
+                        document.getElementById('httpsgithubcomopentypejsopentypejs').appendChild(newParagraph);
+
+                        form = document.getElementById('demoOBJ');
+                        form.oninput = renderText;
+                        form.file.onchange = function (e) {
+                            display(e.target.files[0], e.target.files[0].name);
+                        };
+                        enableHighDPICanvas('preview');
+                        enableHighDPICanvas('snap');
+                        display(await fetch(fontFileName), fontFileName);
+
+                    };
+                }
+                reader.readAsDataURL(e.target.files[0]);
+
+            };
+        });
 
     </script>
+
 </body>
 
 </html>
