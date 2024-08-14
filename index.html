@@ -108,7 +108,7 @@
     <!-- Include the Quill library -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script type="module">
-        import * as opentype from "/opentype.module.js";
+        import * as opentype from "/txtonjpg/opentype.module.js";
 
         // Initialize Quill editor 
         var quill = new Quill('#editor-container', {
@@ -178,9 +178,12 @@
             const font = window.font;
             if (!font) return;
             var textToRender = quill.getText();// form.textField.value;
-            
+            var boolDataUrl=false;
              if(varString&&!varString.target){
-console.log("good");
+                 textToRender=varString;
+                 if(textToRender==='__puppeteer__'){return true;
+                 }
+                 boolDataUrl=true;
         }
             
             var previewCtx = document.getElementById('preview').getContext('2d');
@@ -216,6 +219,16 @@ console.log("good");
             var snapCtx = document.getElementById('snap').getContext('2d');
             snapCtx.clearRect(0, 0, 940, 300);
             snapPath.draw(snapCtx);
+if(boolDataUrl){
+    const canvas = document.getElementById('preview');
+    const link = document.createElement('a');
+    const dataUrl = canvas.toDataURL('image/jpeg');
+    link.href = dataUrl;
+    link.download = getCurrentDateTimeString()+'.jpg';
+    link.style="display:none;"
+    link.classList.add('__puppeteer__');
+    document.body.appendChild(link);
+}
         }
 
         window.renderText = renderText;

@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import path from 'path';
+import path from 'path';import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 // Get the current file path
@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
-  await page.goto('http://127.0.0.1:48489/index.html');
+  await page.goto('https://andythebreaker.github.io/txtonjpg/');
 
   // Set screen size.
   await page.setViewport({ width: 1080, height: 1024 });
@@ -26,28 +26,30 @@ const __dirname = path.dirname(__filename);
     console.error('File input element not found!');
   }
 
-  await page.waitForSelector("#preview"); // Wait for the image upload to complete
+  await page.waitForFunction('renderText("__puppeteer__")');
 
   // Call the renderText function if necessary
   await page.evaluate(() => {
-    renderText("abc");
+    renderText("abc\n");
   });
 
 
+const dataurl_ = await page.$('.__puppeteer__'); 
+const imageUrl = await page.evaluate(el => el.href || el.src, dataurl_);
+ var dataurl =String(imageUrl);
+ //console.log(dataurl);
+if (dataurl && dataurl.startsWith('data:image')) {
+    // Extract the base64 string from the data URL
+    const base64Data = dataurl.split(',')[1];
 
-// Type into search box.
-//await page.locator('.devsite-search-field').fill('automate beyond recorder');
+    // Decode the base64 string
+    const buffer = Buffer.from(base64Data, 'base64');
 
-// Wait and click on first result.
-//await page.locator('.devsite-result-item-link').click();
+    // Save the image to a file
+    fs.writeFileSync('image.jpg', buffer);
 
-// Locate the full title with a unique string.
-//const textSelector = await page
-//  .locator('text/Customize and automate')
-//  .waitHandle();
-//const fullTitle = await textSelector?.evaluate(el => el.textContent);
+    console.log('Image saved as image.jpg');
+  } else {
+    console.log('No base64 data URL found.');
+  }
 
-// Print the full title.
-//console.log('The title of this blog post is "%s".', fullTitle);
-
-//await browser.close();
