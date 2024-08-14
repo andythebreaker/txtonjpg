@@ -174,10 +174,18 @@
             }
         }
 
-        function renderText() {
+        export  function renderText(varString) {
             const font = window.font;
             if (!font) return;
-            const textToRender = quill.getText();// form.textField.value;
+            var textToRender = quill.getText();// form.textField.value;
+            var boolDataUrl=false;
+             if(varString&&!varString.target){
+                 textToRender=varString;
+                 if(textToRender==='__puppeteer__'){return true;
+                 }
+                 boolDataUrl=true;
+        }
+            
             var previewCtx = document.getElementById('preview').getContext('2d');
             // img id='x' into previewCtx
             previewCtx.drawImage(document.getElementById('x'), 0, 0);
@@ -211,8 +219,19 @@
             var snapCtx = document.getElementById('snap').getContext('2d');
             snapCtx.clearRect(0, 0, 940, 300);
             snapPath.draw(snapCtx);
+if(boolDataUrl){
+    const canvas = document.getElementById('preview');
+    const link = document.createElement('a');
+    const dataUrl = canvas.toDataURL('image/jpeg');
+    link.href = dataUrl;
+    link.download = getCurrentDateTimeString()+'.jpg';
+    link.style="display:none;"
+    link.classList.add('__puppeteer__');
+    document.body.appendChild(link);
+}
         }
 
+        window.renderText = renderText;
         function enableHighDPICanvas(canvas) {
             if (typeof canvas === 'string') {
                 canvas = document.getElementById(canvas);
