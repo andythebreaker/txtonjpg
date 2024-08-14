@@ -33,7 +33,7 @@ const argv = yargs(process.argv.slice(2))
     return true;
   })
   .argv;
-  
+
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
   
@@ -56,8 +56,23 @@ const argv = yargs(process.argv.slice(2))
     process.exit(1);
   }
   
-  await page.waitForFunction('renderText("__puppeteer__")');
+  //await page.waitForFunction('renderText("__puppeteer__")');
+    // Function to check if renderText returns true
+    const checkRenderText = async () => {
+      const result = await page.evaluate(() => {
+        return renderText("__puppeteer__");
+      });
   
+      if (!result) {
+        console.log("wait...");
+        await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds
+        return checkRenderText(); // Check again after waiting
+      }
+  
+      return result;
+    };
+  await checkRenderText();
+
   const textToRender = argv.string;
   await page.evaluate((text) => {
     renderText(text);
