@@ -4,7 +4,9 @@
   "description": "put text on jpg",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "start": "node index.js",
+    "up": "node preCommit.js",
+    "down": "node postPull.js"
   },
   "repository": {
     "type": "git",

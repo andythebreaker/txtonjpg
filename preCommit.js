@@ -13,8 +13,8 @@ fs.readFile(filePath, 'utf8', (err, data) => {
 
     // Replace the specified string
     const result = data.replace(
-        'import * as opentype from "/txtonjpg/opentype.module.js";',
-        'import * as opentype from "/opentype.module.js";'
+        'import * as opentype from "/opentype.module.js";',
+        'import * as opentype from "/txtonjpg/opentype.module.js";'
     );
 
     // Write the updated content back to the file
