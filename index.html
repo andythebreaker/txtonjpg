@@ -18,8 +18,8 @@
         integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-<!--hot fix NL-->
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <!--hot fix NL-->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
     <style>
         * {
@@ -65,7 +65,7 @@
         <input id="file" type="file" style="display: none">
 
         <!-- Create the editor container -->
-    <div id="editor-container"></div>
+        <div id="editor-container"></div>
     </header>
 
     <main>
@@ -103,16 +103,18 @@
     <footer style="display: none;">
         &copy; 2023 Mobile-first PWA Example
     </footer>
-    
-    
+
+
     <!-- Include the Quill library -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script type="module">
-        import * as opentype from "/txtonjpg/opentype.module.js";
+        import * as opentype from "/opentype.module.js";
 
         // Initialize Quill editor 
         var quill = new Quill('#editor-container', {
             theme: 'snow'
+        }); quill.on('text-change', function (delta, oldDelta, source) {
+            renderText();
         });
 
         //////////////////////////////////////
@@ -175,7 +177,7 @@
         function renderText() {
             const font = window.font;
             if (!font) return;
-            const textToRender =quill.getText();// form.textField.value;
+            const textToRender = quill.getText();// form.textField.value;
             var previewCtx = document.getElementById('preview').getContext('2d');
             // img id='x' into previewCtx
             previewCtx.drawImage(document.getElementById('x'), 0, 0);
@@ -193,8 +195,8 @@
             const yMargin = +form.marginY.value;
 
             textToRender.split(/\r?\n/).slice(0, -1).forEach((line, index) => {
-font.draw(previewCtx, line, 0, yMargin*(index+1), fontSize, options);
-});
+                font.draw(previewCtx, line, 0, yMargin * (index + 1), fontSize, options);
+            });
 
             //font.draw(previewCtx, textToRender, 0, yMargin, fontSize, options);
             if (form.drawPoints.checked) {

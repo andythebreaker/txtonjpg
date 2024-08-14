@@ -1,28 +1,29 @@
-const fs = require('fs');
-const path = require('path');
+import puppeteer from 'puppeteer';
+// Or import puppeteer from 'puppeteer-core';
 
-// Path to the index.html file
-const filePath = path.join(__dirname, 'index.html');
+// Launch the browser and open a new blank page
+const browser = await puppeteer.launch({headless: false});
+const page = await browser.newPage();
 
-// Read the file
-fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-        console.error('Error reading file:', err);
-        return;
-    }
+// Navigate the page to a URL.
+await page.goto('https://developer.chrome.com/');
 
-    // Replace the specified string
-    const result = data.replace(
-        'import * as opentype from "/opentype.module.js";',
-        'import * as opentype from "/txtonjpg/opentype.module.js";'
-    );
+// Set screen size.
+await page.setViewport({width: 1080, height: 1024});
 
-    // Write the updated content back to the file
-    fs.writeFile(filePath, result, 'utf8', (err) => {
-        if (err) {
-            console.error('Error writing file:', err);
-            return;
-        }
-        console.log('File has been updated successfully.');
-    });
-});
+// Type into search box.
+await page.locator('.devsite-search-field').fill('automate beyond recorder');
+
+// Wait and click on first result.
+await page.locator('.devsite-result-item-link').click();
+
+// Locate the full title with a unique string.
+const textSelector = await page
+  .locator('text/Customize and automate')
+  .waitHandle();
+const fullTitle = await textSelector?.evaluate(el => el.textContent);
+
+// Print the full title.
+console.log('The title of this blog post is "%s".', fullTitle);
+
+await browser.close();
