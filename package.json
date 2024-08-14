@@ -1,0 +1,27 @@
+{
+  "name": "txtonjpg",
+  "version": "1.0.0",
+  "description": "put text on jpg",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:andythebreaker/txtonjpg.git"
+  },
+  "keywords": [
+    "jpg",
+    "jpeg",
+    "txt",
+    "html",
+    "text",
+    "chenyuluoyan"
+  ],
+  "author": "andythebreaker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andythebreaker/txtonjpg/issues"
+  },
+  "homepage": "https://github.com/andythebreaker/txtonjpg#readme"
+}
