@@ -36,8 +36,8 @@ jobs:
       # Add a step to compile your HTML using Jekyll
       - name: try1
         run: |
-          npm install txtonjpg -g -i a.jpg -o b.jpg
-          txtonjpg -s try -i 
+          npm install txtonjpg -g 
+          txtonjpg -s bear -i a.jpg -o b.jpg
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
