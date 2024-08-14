@@ -108,7 +108,7 @@
     <!-- Include the Quill library -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script type="module">
-        import * as opentype from "/txtonjpg/opentype.module.js";
+        import * as opentype from "/opentype.module.js";
 
         // Initialize Quill editor 
         var quill = new Quill('#editor-container', {
@@ -174,10 +174,15 @@
             }
         }
 
-        function renderText() {
+        export  function renderText(varString) {
             const font = window.font;
             if (!font) return;
-            const textToRender = quill.getText();// form.textField.value;
+            var textToRender = quill.getText();// form.textField.value;
+            
+             if(varString&&!varString.target){
+console.log("good");
+        }
+            
             var previewCtx = document.getElementById('preview').getContext('2d');
             // img id='x' into previewCtx
             previewCtx.drawImage(document.getElementById('x'), 0, 0);
@@ -213,6 +218,7 @@
             snapPath.draw(snapCtx);
         }
 
+        window.renderText = renderText;
         function enableHighDPICanvas(canvas) {
             if (typeof canvas === 'string') {
                 canvas = document.getElementById(canvas);
