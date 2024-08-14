@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import puppeteer from 'puppeteer';
 import path from 'path'; import fs from 'fs';
 import { fileURLToPath } from 'url';
