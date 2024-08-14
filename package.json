@@ -1,7 +1,7 @@
 {
   "name": "txtonjpg",
   "version": "1.0.0",
-  "description": "put text on jpg",
+  "description": "put text on jpg","type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/andythebreaker/txtonjpg/issues"
   },
-  "homepage": "https://github.com/andythebreaker/txtonjpg#readme"
+  "homepage": "https://github.com/andythebreaker/txtonjpg#readme",
+  "dependencies": {
+    "puppeteer": "^23.0.2"
+  }
 }
